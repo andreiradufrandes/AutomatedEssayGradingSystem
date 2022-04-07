@@ -69,10 +69,26 @@ class App extends Component {
     // this.countParagraphs();
 
     // Check the essay spelling
-    // this.checkSpelling();
+
     // Check if the of words inside the essay is in the range speciied by the lecturer
     // this.checkWordsRange();
     //
+    this.checkSpelling();
+  }
+
+  // Not working
+  checkSpelling() {
+    var Typo = require("typo-js");
+    // var dictionary = new Typo("en_US");
+    var dictionary = new Typo("en_US", false, false, {
+      dictionaryPath: "typo/dictionaries/en_US/",
+    });
+
+    console.log(dictionary.check("eyeteeth"));
+
+    // Check if it is working
+    // let is_spelled_correctly = dictionary.check("yess");
+    // console.log(is_spelled_correctly);
   }
 
   // Counts the words only NOT symbols
@@ -89,16 +105,6 @@ class App extends Component {
   countSentences(essay) {
     // Check the words followed by . or ! or ?, and followed by a whitespace, which signify then end on a sentence
     return essay.match(/\w[.!?]\s*\$*/g).length;
-  }
-
-  // Not working
-  checkSpelling(essay) {
-    const Typo = require("typo-js");
-    const dictionary = new Typo();
-
-    // Check if it is working
-    let is_spelled_correctly = dictionary.check("mispelled");
-    console.log(is_spelled_correctly);
   }
 
   checkForLecturersParameters() {
@@ -124,7 +130,7 @@ class App extends Component {
       this.state.lecturerInput3,
       this.state.lecturerInput4,
       this.state.lecturerInput5,
-      "\nParameters present: ",
+      " Parameters present: ",
       this.state.parametersPresentCount
     ); // DELETE
   }
@@ -206,12 +212,6 @@ class App extends Component {
   //   );
   // }
 
-  checkSpelling() {
-    var Typo = require("typo-js");
-    var dictionary = new Typo("en_US");
-    dictionary.check("yes");
-  }
-
   /* TODO
     - Add errors
     - add error for when it's empty as well
@@ -268,14 +268,13 @@ class App extends Component {
               <TextInput
                 style={styles.input}
                 multiline={true}
-                placeholder="Insert text"
                 onChangeText={(essayText) => this.setState({ essayText })}
                 value={this.state.essayText}
               />
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.subtitle}>ADD TOPIC RELATED WORDS</Text>
+              <Text style={styles.subtitle}>INSERT TOPIC RELATED WORDS</Text>
             </View>
             <View style={styles.row}>
               <View>
@@ -347,7 +346,6 @@ class App extends Component {
                   value={this.state.minNumberWords}
                   keyboardType="numeric"
                   maxLength={5}
-                  placeholder="min"
                 ></TextInput>
               </View>
               <View>
@@ -360,7 +358,6 @@ class App extends Component {
                   value={this.state.maxNumberWords}
                   keyboardType="numeric"
                   maxLength={5}
-                  placeholder="max"
                 ></TextInput>
               </View>
             </View>
@@ -389,6 +386,8 @@ export default App;
 const styles = StyleSheet.create({
   body: {
     backgroundColor: "#F1F1F1",
+    backgroundColor: "#F5F5F5",
+    height: "100%",
   },
   input: {
     height: 300,
@@ -408,11 +407,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center", // keep content in the middle
-    padding: 10,
-    maxWidth: 1000,
+    marginTop: 10,
+    maxWidth: 1100,
     width: "100%",
     margin: "auto",
     marginBottom: 50,
+    backgroundColor: "#F1F1F1",
+    // borderLeftWidth: 3,
+    // borderLeftColor: "#E3E3E3",
+    paddingLeft: 40,
+    // borderRightWidth: 3,
+    // borderRightColor: "#E3E3E3",
+    paddingRight: 40,
+    paddingBottom: 20,
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+
     // minWidth: "80vw",
   },
   row: {
@@ -452,6 +461,7 @@ const styles = StyleSheet.create({
   },
   title: {
     backgroundColor: "#E9E9E9",
+    backgroundColor: "#E0E0E0",
     fontSize: 30,
     width: "100%",
     textAlign: "center",
@@ -463,6 +473,8 @@ const styles = StyleSheet.create({
     /* identical to box height */
     letterSpacing: "0.325em",
     color: "#2EA7EB",
+    boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.25)",
+    marginBottom: 20,
   },
   primaryButton: {
     textAlign: "center",
