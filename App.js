@@ -23,6 +23,7 @@ class App extends Component {
       essayWordCount: "",
       essaySentenceCount: "",
       averageSentenceLength: "",
+      averageWordLength: "",
       // Store the input from the lecturer
       lecturerTopicTerms: [],
       lecturerInput1: "",
@@ -36,8 +37,9 @@ class App extends Component {
       // Keep track of the range of words the lecturer expects the essay to be
       minNumberWords: "",
       maxNumberWords: "",
-
       // Slider value
+      // Keep track of the number of prepositions
+      prepositionsCount: 0,
     };
   }
 
@@ -52,7 +54,10 @@ class App extends Component {
     const essay = essayExample; // change
 
     // Count the number of words for the whole essay
-    this.state.essayWordCount = this.countWords(essay);
+    this.state.essayWordCount = this.countWords();
+
+    // calculate the average word length
+    this.state.averageWordLength = this.averageWordLength();
 
     // Count the number of sentences for the whole essay
     this.state.essaySentenceCount = this.countSentences(essay);
@@ -73,38 +78,129 @@ class App extends Component {
     // Check if the of words inside the essay is in the range speciied by the lecturer
     // this.checkWordsRange();
     //
+    // Count the number of prepositions present in the essay
+    this.countPrepositions();
+
+    // Check how frequently each word appear in the essay
+    this.checkWordFrequency();
+
     this.checkSpelling();
+
+    this.checkPunctuation();
   }
 
   // Not working
   checkSpelling() {
-    var Typo = require("typo-js");
-    // var dictionary = new Typo("en_US");
-    var dictionary = new Typo("en_US", false, false, {
-      dictionaryPath: "typo/dictionaries/en_US/",
-    });
-
-    console.log(dictionary.check("eyeteeth"));
-
-    // Check if it is working
-    // let is_spelled_correctly = dictionary.check("yess");
-    // console.log(is_spelled_correctly);
+    // const fs = require("fs");
+    // // var text = fs.readFileSync("./words.txt");
+    // var text = fs.readFileSync("/words.txt");
+    // var textByLine = text.split("\n");
   }
 
   // Counts the words only NOT symbols
-  countWords(essay) {
+  countWords() {
+    let essay = this.state.essayText;
+
+    // Delete later
+    essay =
+      "In this essay we will  discuss the... Notion that virtue is knowledge. We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
+    essay = "my name is andrei i";
     // Replace all the characters with an empty space before preceding to counting the total number of words
     essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
     // Remove multiple spaces with single space to lead to correct word count
     essay = essay.replace(/[ ]{2,}/g, " ");
-    // Count all the words
+    // Count the number of words
     const totalWordCount = essay.split(" ").length;
+
     return totalWordCount;
+  }
+
+  // Count how often each word is present
+  checkWordFrequency() {
+    let essay = this.state.essayText;
+    essay =
+      "In this essay we will  discuss the... Notion that virtue is knowledge. We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
+    // Replace all the characters with an empty space before preceding to counting the total number of words
+    essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
+    // Remove multiple spaces with single space to lead to correct word count
+    essay = essay.replace(/[ ]{2,}/g, " ");
+    // Count the number of words
+    essay = essay.split(" ");
+
+    let wordFrequencyCounter = {};
+
+    // Loop through all the word in the essay, and keep count of how many times they appear
+    essay.forEach((word) => {
+      // If the word is not present, add it to the dictionary
+      if (!wordFrequencyCounter[word]) {
+        wordFrequencyCounter[word] = 1;
+      } else {
+        // If the word is already present in the dictionary, increase its count number
+        wordFrequencyCounter[word] += 1;
+      }
+    });
+
+    // console.group(wordFrequencyCounter);
+  }
+
+  // Check the average length of the words
+  averageWordLength() {
+    let essay = this.state.essayText;
+
+    // DELETE
+    essay =
+      "In this essay we will  discuss the... Notion that virtue is knowledge. We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
+    // Replace all the characters with an empty space before preceding to counting the total number of words
+    essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
+    // Remove multiple spaces with single space to lead to correct word count
+    essay = essay.replace(/[ ]{2,}/g, " ");
+    // store all the words inside an array to be able to count the word length after
+    essay = essay.split(" ");
+
+    let totalWordLength = 0;
+    // Calculate the length of each word and add it together to be able to calculater the average
+    essay.forEach((word) => {
+      totalWordLength += word.length;
+    });
+
+    // Divide the sum of all length of each word by the total number of words
+    let averageLength = totalWordLength / this.state.essayWordCount;
+
+    return averageLength;
   }
 
   countSentences(essay) {
     // Check the words followed by . or ! or ?, and followed by a whitespace, which signify then end on a sentence
     return essay.match(/\w[.!?]\s*\$*/g).length;
+  }
+
+  checkPunctuation() {
+    let essay = this.state.essayText;
+    // Check the words followed by . or ! or ?, and followed by a whitespace, which signify then end on a sentence
+
+    essay =
+      "In this essay we will  discuss the...otion that virtue is knowledge. (We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. \"The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. (altought)We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
+    console.log(essay.match(/[^.!?]+[.!?]/g));
+
+    let errorCounter = 0;
+    // Breack the essay into sentences and check that it starts with the capitalised word
+    essay = essay.match(/[^.!?]+[.!?]/g);
+
+    // Check that the first occurance is a number OR " OR capitalised word
+    let sentenceStartPattern = /^ *[A-Z1-9"\(]/g;
+    let firstSentence = essay[1];
+
+    // if !sentence (is null, count mistake)
+    console.log(firstSentence);
+    console.log(firstSentence.match(sentenceStartPattern));
+    console.log(!firstSentence.match(sentenceStartPattern));
+
+    essay.forEach((sentence) => {
+      if (!sentence.match(sentenceStartPattern)) {
+        console.log("Error, sentence written incorscely:  ", sentence);
+        errorCounter += 1;
+      }
+    });
   }
 
   checkForLecturersParameters() {
@@ -123,16 +219,16 @@ class App extends Component {
     // Check how many of the parameters are present inside the essay
     lecturerParameteres.forEach((element) => this.checkForParameter(element));
 
-    console.log(
-      "Parameters: ",
-      this.state.lecturerInput1,
-      this.state.lecturerInput2,
-      this.state.lecturerInput3,
-      this.state.lecturerInput4,
-      this.state.lecturerInput5,
-      " Parameters present: ",
-      this.state.parametersPresentCount
-    ); // DELETE
+    // console.log(
+    //   "Parameters: ",
+    //   this.state.lecturerInput1,
+    //   this.state.lecturerInput2,
+    //   this.state.lecturerInput3,
+    //   this.state.lecturerInput4,
+    //   this.state.lecturerInput5,
+    //   " Parameters present: ",
+    //   this.state.parametersPresentCount
+    // ); // DELETE
   }
 
   // Helper function to cehck for individual search terms
@@ -168,6 +264,395 @@ class App extends Component {
         }
       }
     }
+  }
+
+  // Count the number of prepositions present inside the essay
+  countPrepositions() {
+    let essay = this.state.essayText.toLowerCase();
+    const prepositions = [
+      "About",
+      "After",
+      "Ago",
+      "Around",
+      "At",
+      "Before",
+      "By",
+      "Circa",
+      "During",
+      "Following",
+      "For",
+      "From",
+      "Gone",
+      "In",
+      "On",
+      "Past",
+      "Prior to",
+      "Since",
+      "Until",
+      "till",
+      "Up to",
+      "Up until",
+      "Aboard",
+      "Above",
+      "Across",
+      "Against",
+      "Alongside",
+      "Amid",
+      "Among",
+      "Apart from",
+      "Astride",
+      "At",
+      "Atop",
+      "Behind",
+      "Below",
+      "Beneath",
+      "Beside",
+      "Between",
+      "Beyond",
+      "By",
+      "Close to",
+      "Far",
+      "Far from",
+      "Forward of",
+      "From",
+      "In",
+      "In between",
+      "In front of",
+      "Inside",
+      "Into",
+      "Minus",
+      "Near",
+      "Near to",
+      "Next to",
+      "Of",
+      "Off",
+      "On",
+      "On board",
+      "On top of",
+      "Onto",
+      "Upon",
+      "Opposite",
+      "Out",
+      "Out of",
+      "Outside",
+      "Outside of",
+      "Over",
+      "Round",
+      "Through",
+      "Throughout",
+      "To",
+      "Together with",
+      "Toward",
+      "towards",
+      "Under",
+      "Underneath",
+      "Up against",
+      "With",
+      "Within",
+      "Without",
+      "Above",
+      "Across",
+      "Against",
+      "Ahead",
+      "Along",
+      "Along with",
+      "Amid",
+      "Around",
+      "Away",
+      "Away from",
+      "Behind",
+      "Below",
+      "Beneath",
+      "By means of",
+      "Down",
+      "Further to",
+      "In between",
+      "Into",
+      "Off",
+      "Off of",
+      "On",
+      "Onto",
+      "Over",
+      "Out of",
+      "Past",
+      "Round",
+      "Through",
+      "Toward/towards",
+      "Under",
+      "Up",
+      "Via",
+      "About",
+      "According to",
+      "Anti",
+      "As",
+      "As for",
+      "As per",
+      "As to",
+      "As well as",
+      "Aside from",
+      "Bar",
+      "Barring",
+      "Because of",
+      "Besides",
+      "But for",
+      "By",
+      "But",
+      "Concerning",
+      "Considering",
+      "Contrary to",
+      "Counting",
+      "Cum",
+      "Depending on",
+      "Despite",
+      "Due to",
+      "Except",
+      "Except for",
+      "Excepting",
+      "Excluding",
+      "Given",
+      "In addition to",
+      "in case of",
+      "In face of",
+      "In favor of",
+      "in favour of",
+      "In light of",
+      "In spite of",
+      "In view of",
+      "Including",
+      "Instead of",
+      "Less",
+      "Like",
+      "Notwithstanding",
+      "Of",
+      "On account of",
+      "On behalf of",
+      "Other than",
+      "Owing to",
+      "Pending",
+      "Per",
+      "Plus",
+      "Preparatory to",
+      "Pro",
+      "Re",
+      "Regarding",
+      "Regardless of",
+      "Save",
+      "Save for",
+      "Saving",
+      "Than",
+      "Thanks to",
+      "Unlike",
+      "Versus",
+      "With",
+      "With reference to",
+      "With regard to",
+      "Worth",
+    ];
+    // Store all the prepositions in an array to be looked for inside the essay
+    const multiWordsPrepositions = [
+      "Prior to",
+      "Up to",
+      "Up until",
+      "Apart from",
+      "Close to",
+      "Far from",
+      "Forward of",
+      "In between",
+      "In front of",
+      "Near to",
+      "Next to",
+      "On board",
+      "On top of",
+      "Out of",
+      "Outside of",
+      "Together with",
+      "Up against",
+      "Along with",
+      "Away from",
+      "By means of",
+      "Further to",
+      "In between",
+      "Off of",
+      "Out of",
+      "According to",
+      "As for",
+      "As per",
+      "As to",
+      "As well as",
+      "Aside from",
+      "Because of",
+      "But for",
+      "Contrary to",
+      "Depending on",
+      "Due to",
+      "Except for",
+      "In addition to",
+      "in case of",
+      "In face of",
+      "In favor of",
+      "in favour of",
+      "In light of",
+      "In spite of",
+      "In view of",
+      "Instead of",
+      "On account of",
+      "On behalf of",
+      "Other than",
+      "Owing to",
+      "Preparatory to",
+      "Regardless of",
+      "Save for",
+      "Thanks to",
+      "With reference to",
+      "With regard to",
+    ];
+
+    const singleWordPrepositions = [
+      "About",
+      "After",
+      "Ago",
+      "Around",
+      "At",
+      "Before",
+      "By",
+      "Circa",
+      "During",
+      "Following",
+      "For",
+      "From",
+      "Gone",
+      "In",
+      "On",
+      "Past",
+      "Since",
+      "Until",
+      "till",
+      "Aboard",
+      "Above",
+      "Across",
+      "Against",
+      "Alongside",
+      "Amid",
+      "Among",
+      "Astride",
+      "At",
+      "Atop",
+      "Behind",
+      "Below",
+      "Beneath",
+      "Beside",
+      "Between",
+      "Beyond",
+      "By",
+      "Far",
+      "From",
+      "In",
+      "Inside",
+      "Into",
+      "Minus",
+      "Near",
+      "Of",
+      "Off",
+      "On",
+      "Onto",
+      "Upon",
+      "Opposite",
+      "Out",
+      "Outside",
+      "Over",
+      "Round",
+      "Through",
+      "Throughout",
+      "To",
+      "Toward",
+      "towards",
+      "Under",
+      "Underneath",
+      "With",
+      "Within",
+      "Without",
+      "Above",
+      "Across",
+      "Against",
+      "Ahead",
+      "Along",
+      "Amid",
+      "Around",
+      "Away",
+      "Behind",
+      "Below",
+      "Beneath",
+      "Down",
+      "Into",
+      "Off",
+      "On",
+      "Onto",
+      "Over",
+      "Past",
+      "Round",
+      "Through",
+      "Toward/towards",
+      "Under",
+      "Up",
+      "Via",
+      "About",
+      "Anti",
+      "As",
+      "Bar",
+      "Barring",
+      "Besides",
+      "By",
+      "But",
+      "Concerning",
+      "Considering",
+      "Counting",
+      "Cum",
+      "Despite",
+      "Except",
+      "Excepting",
+      "Excluding",
+      "Given",
+      "Including",
+      "Less",
+      "Like",
+      "Notwithstanding",
+      "Of",
+      "Pending",
+      "Per",
+      "Plus",
+      "Pro",
+      "Re",
+      "Regarding",
+      "Save",
+      "Saving",
+      "Than",
+      "Unlike",
+      "Versus",
+      "With",
+      "Worth",
+    ];
+    // console.log(essay);
+
+    singleWordPrepositions.forEach((preposition) => {
+      // prepositionPattern = new RegExp("( |^)" + preposition.toLowerCase() + "( |$)");
+      let prepositionPattern = new RegExp(
+        "( |^)" + preposition.toLowerCase() + "( |$)"
+      );
+      if (essay.match(prepositionPattern)) {
+        // Increase the count if the preposition is present
+        this.prepositionsCount += 1;
+        console.log("Single word prepositon ----------1: ", preposition);
+      }
+    });
+
+    multiWordsPrepositions.forEach((preposition) => {
+      if (essay.includes(preposition.toLowerCase())) {
+        // Increase the count if the preposition is present
+        this.prepositionsCount += 1;
+        console.log("Multi word preposition :----------", preposition);
+      }
+    });
+    // console.log("prepositions count: ", this.state.prepositionsCount);
   }
 
   // Count the number of paragraphs
@@ -386,6 +871,7 @@ export default App;
 const styles = StyleSheet.create({
   body: {
     backgroundColor: "#F1F1F1",
+    backgroundColor: "#F5F5F5",
     backgroundColor: "#F5F5F5",
     height: "100%",
   },
