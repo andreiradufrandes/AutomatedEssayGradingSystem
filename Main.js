@@ -14,7 +14,8 @@ class Main extends Component {
       // create s stack navigator to contain the first 3 components of the app
       <NavigationContainer>
         {/* Hide the header of the page */}
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {/* <Stack.Navigator screenOptions={{ headerShown: false }}> */}
+        <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Feedback" component={FeedbackScreen} />
         </Stack.Navigator>

@@ -15,8 +15,8 @@ class App extends Component {
       <NavigationContainer>
         {/* Hide the header of the page */}
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Feedback" component={FeedbackScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Feedback" component={FeedbackScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

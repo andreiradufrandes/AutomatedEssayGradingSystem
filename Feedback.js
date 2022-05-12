@@ -21,8 +21,11 @@ import React, { Component } from "react";
 class FeedbackScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    // this.state = {};
+    this.state = this.props.route.params.results;
   }
+
+  results = this.props.route.params.results;
 
   render() {
     return (
@@ -32,20 +35,191 @@ class FeedbackScreen extends Component {
         <View style={styles.container}>
           <View style={styles.gradeRow}>
             <Text style={styles.gradeLabel}>GRADE: </Text>
+            <Text style={styles.gradeLabel}></Text>
             <Text style={styles.grade}>5.6/10</Text>
           </View>
-          <View style={styles.row}>
+          {/* <View style={styles.row}>
             <Text style={styles.subtitle}>OVERVIEW OF THE ESSAY</Text>
-          </View>
+          </View> */}
 
           <View style={styles.row}>
-            <View style={styles.table}>
-              <Text>1</Text>
-              <Text>1</Text>
-              <Text>1</Text>
-              <Text>1</Text>
+            {/* <View style={styles.table}> */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableHeaderText}>FEATURE</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableHeaderText}>ERROR COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableHeaderText}>SCORE</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>WORD COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>{this.state.wordCount}</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>SENTENCE COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.essaySentenceCount}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>PARAGRAPHS COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.paragraphsCount}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>PREPOSITIONS COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.prepositionsCount}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>REFERENCES COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.referencesCount}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>
+                  AVERAGE SENTENCE LENGTH
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.averageSentenceLength}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>AVERAGE WORD LENGTH</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.averageWordLength}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>
+                  PERCENTAGE UNIQUE WORDS
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.percentageUniqueWords}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>KEY TERMS PRESENT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.keyTermsPresent}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>KEY PHRASES PRESENT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.keyPhrasesPresent}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>--</Text>
+              </View>
+            </View>
+            {/* Table row */}
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>SPELLING ERRORS COUNT</Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.spellingMistakesCount}
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}></Text>
+              </View>
             </View>
           </View>
+          <Button
+            onPress={() => {
+              console.log(this.state);
+            }}
+            title="STATE"
+          ></Button>
           {/* <Row data={state.HeadTable} style={styles.HeadStyle} textStyle={styles.TableText}/>
           <Rows data={state.DataTable} textStyle={styles.TableText}/> */}
         </View>
@@ -57,6 +231,35 @@ class FeedbackScreen extends Component {
 export default FeedbackScreen;
 
 const styles = StyleSheet.create({
+  tableRow: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    width: "100%",
+    flexWrap: "wrap",
+    gap: 8,
+    borderBottomWidth: 1,
+    borderColor: "#E5E4E4",
+    paddingBottom: 5,
+  },
+  tableCellText: {
+    color: "rgb(68, 68, 68)",
+  },
+  tableCellLabel: {
+    // backgroundColor: "white",
+    flexGrow: 2,
+    // color: "rgb(68, 68, 68)",
+  },
+  tableHeaderText: {
+    fontSize: 20,
+    color: "#2EA7EB",
+  },
+  tableCell: {
+    // backgroundColor: "white",
+    color: "rgb(68, 68, 68)",
+    minWidth: 130,
+  },
   table: {
     backgroundColor: "red",
   },
