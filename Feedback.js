@@ -51,9 +51,6 @@ class FeedbackScreen extends Component {
               <View style={styles.tableCell}>
                 <Text style={styles.tableHeaderText}>ERROR COUNT</Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableHeaderText}>SCORE</Text>
-              </View>
             </View>
             {/* Table row */}
             <View style={styles.tableRow}>
@@ -62,9 +59,6 @@ class FeedbackScreen extends Component {
               </View>
               <View style={styles.tableCell}>
                 <Text style={styles.tableCellText}>{this.state.wordCount}</Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
               </View>
             </View>
             {/* Table row */}
@@ -77,9 +71,6 @@ class FeedbackScreen extends Component {
                   {this.state.essaySentenceCount}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
-              </View>
             </View>
             {/* Table row */}
             <View style={styles.tableRow}>
@@ -90,9 +81,6 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableCellText}>
                   {this.state.paragraphsCount}
                 </Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
               </View>
             </View>
             {/* Table row */}
@@ -105,9 +93,6 @@ class FeedbackScreen extends Component {
                   {this.state.prepositionsCount}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
-              </View>
             </View>
             {/* Table row */}
             <View style={styles.tableRow}>
@@ -118,9 +103,6 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableCellText}>
                   {this.state.referencesCount}
                 </Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
               </View>
             </View>
             {/* Table row */}
@@ -135,9 +117,6 @@ class FeedbackScreen extends Component {
                   {this.state.averageSentenceLength}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
-              </View>
             </View>
             {/* Table row */}
             <View style={styles.tableRow}>
@@ -148,9 +127,6 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableCellText}>
                   {this.state.averageWordLength}
                 </Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
               </View>
             </View>
 
@@ -166,9 +142,6 @@ class FeedbackScreen extends Component {
                   {this.state.percentageUniqueWords}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
-              </View>
             </View>
 
             {/* Table row */}
@@ -181,9 +154,6 @@ class FeedbackScreen extends Component {
                   {this.state.keyTermsPresent}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
-              </View>
             </View>
             {/* Table row */}
             <View style={styles.tableRow}>
@@ -194,9 +164,6 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableCellText}>
                   {this.state.keyPhrasesPresent}
                 </Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>--</Text>
               </View>
             </View>
             {/* Table row */}
@@ -209,17 +176,14 @@ class FeedbackScreen extends Component {
                   {this.state.spellingMistakesCount}
                 </Text>
               </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}></Text>
-              </View>
             </View>
           </View>
-          <Button
+          {/* <Button
             onPress={() => {
               console.log(this.state);
             }}
             title="STATE"
-          ></Button>
+          ></Button> */}
           {/* <Row data={state.HeadTable} style={styles.HeadStyle} textStyle={styles.TableText}/>
           <Rows data={state.DataTable} textStyle={styles.TableText}/> */}
         </View>

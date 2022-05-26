@@ -107,10 +107,52 @@ class HomeScreen extends Component {
       spellingMistakesCount: this.state.spellingMistakesCount,
       essaySentenceCount: this.state.essaySentenceCount,
     };
+
+    // Check the punctuation
+    // this.checkPunctuation1();
+    this.percentageUniqueWords();
+
+    var dictionary = new Typo("en_EN", false, false, {
+      dictionaryPath: "typo/dictionaries",
+    });
+
+    var is_spelled_correctly = dictionary.check("mispelled");
+
+    console.log(is_spelled_correctly);
+    // -> ['blahblahblah', 'olololo']
+
     // Send the object cntaining the essay features to the results page
     this.props.navigation.navigate("Feedback", {
       results: results,
     });
+  }
+
+  percentageUniqueWords() {
+    let essay = this.state.essayText;
+    // Replace all the characters with an empty space before preceding to counting the total number of words
+    essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
+    // Remove multiple spaces with single space to lead to correct word count
+    essay = essay.replace(/[ ]{2,}/g, " ");
+    // turn all the words to lowercase to ease the search
+    essay = essay.toLowerCase();
+    // divide the essay into individual words
+    essay = essay.split(" ");
+
+    console.log("UNIQUE WORDS: ", essay);
+  }
+
+  checkPunctuation1() {
+    let essay = this.state.essayText;
+
+    // Break the essay in sentences to be checked for correct punctuation
+    let essaySentences = essay.match(/[^\.!\?]+[\.!\?]+/g);
+    //
+    console.log("CHECK PUNCTUATION: ", essaySentences);
+
+    // Create an array that contains the valid punctuation for a sentence
+    let validPunctuation = [".", "...", "?", "?!", "!"];
+
+    // for each of the sentences, check if the punctuation at the end is correct
   }
 
   // Not working
@@ -134,6 +176,7 @@ class HomeScreen extends Component {
     essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
     // Remove multiple spaces with single space to lead to correct word count
     essay = essay.replace(/[ ]{2,}/g, " ");
+
     // Count the number of words
     this.state.essayWordCount = essay.split(" ").length;
   }
@@ -207,6 +250,7 @@ class HomeScreen extends Component {
     let errorCounter = 0;
     // Breack the essay into sentences and check that it starts with the capitalised word
     essay = essay.match(/[^.!?]+[.!?]/g);
+    console.log(essay);
 
     // Check that the first occurance is a number OR " OR capitalised word
     let sentenceStartPattern = /^ *[A-Z1-9"\(]/g;
@@ -219,42 +263,6 @@ class HomeScreen extends Component {
       }
     });
   }
-
-  // checkForLecturersParameters() {
-  //   // Reset the parameter count inside the state to count correctly at each iteration
-  //   this.state.parametersPresentCount = 0;
-
-  //   // Store all the topic key terms provided by the lecturer in an array to ease the search for individual topic terms
-  //   let lecturerParameteres = [
-  //     this.state.lecturerInput1,
-  //     this.state.lecturerInput2,
-  //     this.state.lecturerInput3,
-  //     this.state.lecturerInput4,
-  //     this.state.lecturerInput5,
-  //     this.state.lecturerInputPhrase1,
-  //     this.state.lecturerInputPhrase2,
-  //     this.state.lecturerInputPhrase3,
-  //     this.state.lecturerInputPhrase4,
-  //     this.state.lecturerInputPhrase5,
-  //   ];
-
-  //   // Check how many of the parameters are present inside the essay
-  //   lecturerParameteres.forEach((element) => this.checkForParameter(element));
-
-  //   // console.log(
-  //   //   "Parameters: ",
-  //   //   this.state.lecturerInput1,
-  //   //   this.state.lecturerInput2,
-  //   //   this.state.lecturerInput3,
-  //   //   this.state.lecturerInput4,
-  //   //   this.state.lecturerInput5,
-  //   //   " Parameters present: ",
-  //   //   this.state.parametersPresentCount
-  //   // ); // DELETE
-  //   console.log(this.state.parametersPresentCount);
-  // }
-
-  // Helper function to cehck for individual search terms
 
   checkForLecturersParameters() {
     // Reset the parameter count inside the state to count correctly at each iteration
@@ -1005,16 +1013,6 @@ class HomeScreen extends Component {
                 onPress={() => this.processText()}
               >
                 <Text style={styles.buttonText}>{"SUBMIT"}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.primaryButton}
-                // onPress={() =>
-                //   this.props.navigation.navigate("Feedback", {
-                //     number: 2,
-                //   })
-                // }
-              >
-                <Text style={styles.buttonText}>{"FEEDBACK PAGE"}</Text>
               </TouchableOpacity>
             </View>
           </View>
