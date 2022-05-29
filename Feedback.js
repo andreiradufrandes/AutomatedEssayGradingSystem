@@ -125,7 +125,7 @@ class FeedbackScreen extends Component {
               </View>
               <View style={styles.tableCell}>
                 <Text style={styles.tableCellText}>
-                  {this.state.averageWordLength}
+                  {this.state.averageWordLengthCount}
                 </Text>
               </View>
             </View>
@@ -174,6 +174,18 @@ class FeedbackScreen extends Component {
               <View style={styles.tableCell}>
                 <Text style={styles.tableCellText}>
                   {this.state.spellingMistakesCount}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCellLabel}>
+                <Text style={styles.tableCellText}>
+                  PUNCTUATION ERROR COUNT
+                </Text>
+              </View>
+              <View style={styles.tableCell}>
+                <Text style={styles.tableCellText}>
+                  {this.state.punctuationErrorCount}
                 </Text>
               </View>
             </View>
