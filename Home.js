@@ -189,6 +189,10 @@ class HomeScreen extends Component {
       keyTermsGrade: 0,
       keyPhrasesGrade: 0,
       punctuationGrade: 0,
+      referencesGrades: 0,
+      paragraphsGrade: 0,
+      percentageUniqueWordsGrade: 0,
+      prepositionGrade: 0,
     };
 
     // --------------------
@@ -251,10 +255,10 @@ class HomeScreen extends Component {
       console.log("word count : beginner");
     }
 
-    // ------------------
+    // -----------------------------
     // Calculate grade for key terms
-    // -----------------
-    console.log(this.state.keyTermsPresent);
+    // -----------------------------
+
     if (this.state.keyTermsPresent == 5) {
       grades.keyTermsGrade = 100;
     } else if (this.state.keyTermsPresent == 4) {
@@ -269,7 +273,7 @@ class HomeScreen extends Component {
     // ------------------
     // Calculate grade for key phrases
     // -----------------
-    console.log(this.state.keyPhrasesPresent);
+
     if (this.state.keyPhrasesPresent == 5) {
       grades.keyPhrasesGrade = 100;
     } else if (this.state.keyPhrasesPresent == 4) {
@@ -284,7 +288,7 @@ class HomeScreen extends Component {
     // -------------------------------
     // Calculate grade for punctuation
     // ----------------------–--------
-    console.log(this.state.punctuationErrorCount, ": punctuationErrorCount");
+
     if (this.state.punctuationErrorCount == 0) {
       grades.punctuationGrade = 100;
     } else if (
@@ -304,6 +308,108 @@ class HomeScreen extends Component {
       grades.punctuationGrade = 25;
     } else {
       grades.punctuationGrade = 0;
+    }
+
+    // -------------------------------
+    // Calculate grade for references count
+    // ----------------------–--------
+
+    // -------------------------------
+    // Rules of essays in the 500 words range
+    // -------------------------------
+    if (essayLengthRules == 500) {
+      // 100 - Excelente ecenariot
+      if (this.state.referencesCount >= 3) {
+        grades.referencesGrades = 100;
+      } else if (this.state.referencesCount == 2) {
+        grades.referencesGrades = 75;
+      } else if (this.state.referencesCount == 1) {
+        grades.referencesGrades = 50;
+      } else if (this.state.referencesCount == 0) {
+        grades.referencesGrades = 25;
+      }
+    }
+
+    // -------------------------------
+    // Rules of essays in the 1000 words range
+    // -------------------------------
+    if (essayLengthRules == 1000) {
+      // 100 - Excelente ecenariot
+      if (this.state.referencesCount >= 5) {
+        grades.referencesGrades = 100;
+      } else if (this.state.referencesCount >= 3) {
+        grades.referencesGrades = 75;
+      } else if (this.state.referencesCount == 2) {
+        grades.referencesGrades = 50;
+      } else if (this.state.referencesCount < 2) {
+        grades.referencesGrades = 25;
+      } else if (this.state.referencesCount == 0) {
+        grades.referencesGrades = 0;
+      }
+    }
+    // -------------------------------
+    // Rules of essays in the longer than 1500 words range
+    // -------------------------------
+    if (essayLengthRules >= 1500) {
+      // 100 - Excelente ecenariot
+      if (this.state.referencesCount >= 7) {
+        grades.referencesGrades = 100;
+      } else if (this.state.referencesCount >= 5) {
+        grades.referencesGrades = 75;
+      } else if (this.state.referencesCount >= 3) {
+        grades.referencesGrades = 50;
+      } else if (this.state.referencesCount >= 1) {
+        grades.referencesGrades = 25;
+      } else if (this.state.referencesCount == 0) {
+        grades.referencesGrades = 0;
+      }
+    }
+
+    // -------------------------------
+    // Rules of paragraphs
+    // -------------------------------
+    console.log(this.state.paragraphsCount);
+
+    if (this.state.paragraphsCount >= 3) {
+      grades.paragraphsGrade = 100;
+    } else if (this.state.paragraphsCount == 2) {
+      grades.paragraphsGrade = 50;
+    } else if (this.state.paragraphsCount < 2) {
+      grades.paragraphsGrade = 0;
+    }
+
+    // -------------------------------
+    // Rules of percentage of unique words
+    // -------------------------------
+    console.log(this.state.uniqueWordsPercentage);
+
+    if (this.state.uniqueWordsPercentage >= 45) {
+      grades.percentageUniqueWordsGrade = 100;
+    } else if (this.state.uniqueWordsPercentage > 25) {
+      grades.percentageUniqueWordsGrade = 75;
+    } else if (this.state.uniqueWordsPercentage > 20) {
+      grades.percentageUniqueWordsGrade = 50;
+    } else if (this.state.uniqueWordsPercentage <= 20) {
+      grades.percentageUniqueWordsGrade = 25;
+    }
+
+    // -------------------------------
+    // Rules of prepositons
+    // -------------------------------
+    // Calculate the raport between words and preposition, the result reresenting how many words are on average for each preposition
+    let wordsPerPreposition = Math.round(
+      this.state.essayWordCount / this.state.prepositionsCount
+    );
+    console.log("words per preposition:", wordsPerPreposition);
+
+    if (wordsPerPreposition >= 10 && wordsPerPreposition <= 15) {
+      grades.prepositionGrade = 100;
+    } else if (wordsPerPreposition < 5 || wordsPerPreposition > 30) {
+      grades.prepositionGrade = 25;
+    } else if (wordsPerPreposition < 8 || wordsPerPreposition > 25) {
+      grades.prepositionGrade = 50;
+    } else if (wordsPerPreposition < 10 || wordsPerPreposition > 15) {
+      grades.prepositionGrade = 75;
     }
 
     console.log(grades);
