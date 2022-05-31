@@ -186,6 +186,9 @@ class HomeScreen extends Component {
     // 1 - Rules for essays of 500 words
     let grades = {
       essayWordCount: 0,
+      keyTermsGrade: 0,
+      keyPhrasesGrade: 0,
+      punctuationGrade: 0,
     };
 
     // --------------------
@@ -247,6 +250,62 @@ class HomeScreen extends Component {
       grades.essayWordCount = 25;
       console.log("word count : beginner");
     }
+
+    // ------------------
+    // Calculate grade for key terms
+    // -----------------
+    console.log(this.state.keyTermsPresent);
+    if (this.state.keyTermsPresent == 5) {
+      grades.keyTermsGrade = 100;
+    } else if (this.state.keyTermsPresent == 4) {
+      grades.keyTermsGrade = 75;
+    } else if (this.state.keyTermsPresent >= 2) {
+      grades.keyTermsGrade = 50;
+    } else if (this.state.keyTermsPresent == 1) {
+      grades.keyTermsGrade = 25;
+    } else {
+      grades.keyTermsGrade = 0;
+    }
+    // ------------------
+    // Calculate grade for key phrases
+    // -----------------
+    console.log(this.state.keyPhrasesPresent);
+    if (this.state.keyPhrasesPresent == 5) {
+      grades.keyPhrasesGrade = 100;
+    } else if (this.state.keyPhrasesPresent == 4) {
+      grades.keyPhrasesGrade = 75;
+    } else if (this.state.keyPhrasesPresent >= 2) {
+      grades.keyPhrasesGrade = 50;
+    } else if (this.state.keyPhrasesPresent == 1) {
+      grades.keyPhrasesGrade = 25;
+    } else {
+      grades.keyPhrasesGrade = 0;
+    }
+    // -------------------------------
+    // Calculate grade for punctuation
+    // ----------------------–--------
+    console.log(this.state.punctuationErrorCount, ": punctuationErrorCount");
+    if (this.state.punctuationErrorCount == 0) {
+      grades.punctuationGrade = 100;
+    } else if (
+      this.state.punctuationErrorCount == 1 ||
+      this.state.punctuationErrorCount == 2
+    ) {
+      grades.punctuationGrade = 75;
+    } else if (
+      this.state.punctuationErrorCount > 2 &&
+      this.state.punctuationErrorCount <= 6
+    ) {
+      grades.punctuationGrade = 50;
+    } else if (
+      this.state.punctuationErrorCount > 6 &&
+      this.state.punctuationErrorCount < 10
+    ) {
+      grades.punctuationGrade = 25;
+    } else {
+      grades.punctuationGrade = 0;
+    }
+
     console.log(grades);
   }
 
