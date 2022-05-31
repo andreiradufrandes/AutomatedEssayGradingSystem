@@ -49,6 +49,7 @@ class HomeScreen extends Component {
       referencesCount: 0,
       punctuationErrorCount: 0,
       uniqueWordsPercentage: 0,
+      sentenceCount: 0,
     };
   }
 
@@ -193,6 +194,9 @@ class HomeScreen extends Component {
       paragraphsGrade: 0,
       percentageUniqueWordsGrade: 0,
       prepositionGrade: 0,
+      sentenceCountGrade: 0,
+      averageSentenceLengthGrade: 0,
+      averageWordLengthGrade: 0,
     };
 
     // --------------------
@@ -381,7 +385,7 @@ class HomeScreen extends Component {
     // -------------------------------
     // Rules of percentage of unique words
     // -------------------------------
-    console.log(this.state.uniqueWordsPercentage);
+    // console.log(this.state.uniqueWordsPercentage);
 
     if (this.state.uniqueWordsPercentage >= 45) {
       grades.percentageUniqueWordsGrade = 100;
@@ -400,7 +404,7 @@ class HomeScreen extends Component {
     let wordsPerPreposition = Math.round(
       this.state.essayWordCount / this.state.prepositionsCount
     );
-    console.log("words per preposition:", wordsPerPreposition);
+    // console.log("words per preposition:", wordsPerPreposition);
 
     if (wordsPerPreposition >= 10 && wordsPerPreposition <= 15) {
       grades.prepositionGrade = 100;
@@ -412,14 +416,75 @@ class HomeScreen extends Component {
       grades.prepositionGrade = 75;
     }
 
+    // -------------------------------
+    // Rules for number of sentences
+    // -------------------------------
+    // Calculate the average amount of sentences per paragraph
+    let sentencePerParagraphAverage = Math.round(
+      this.state.sentenceCount / this.state.paragraphsCount
+    );
+
+    // console.log(sentencePerParagraphAverage);
+    if (sentencePerParagraphAverage >= 3 && sentencePerParagraphAverage <= 5) {
+      grades.sentenceCountGrade = 100;
+    } else if (
+      sentencePerParagraphAverage >= 2 &&
+      sentencePerParagraphAverage <= 7
+    ) {
+      grades.sentenceCountGrade = 50;
+    } else {
+      grades.sentenceCountGrade = 25;
+    }
+
+    // -------------------------------
+    // Rules for sentence lenght
+    // -------------------------------
+    console.log("average sentence length:", this.state.averageSentenceLength);
+    if (
+      this.state.averageSentenceLength >= 15 &&
+      this.state.averageSentenceLength <= 20
+    ) {
+      grades.averageSentenceLengthGrade = 100;
+    } else if (
+      this.state.averageSentenceLength >= 10 &&
+      this.state.averageSentenceLength <= 25
+    ) {
+      grades.averageSentenceLengthGrade = 75;
+    } else {
+      grades.averageSentenceLengthGrade = 50;
+    }
+    // console.log(grades.averageSentenceLengthGrade, " Average sentence length");
+
+    // -------------------------------
+    // Rules for average word length
+    // -------------------------------
+    console.log("average word length", this.state.averageWordLengthCount);
+    if (
+      this.state.averageWordLengthCount >= 5 &&
+      this.state.averageWordLengthCount <= 12
+    ) {
+      grades.averageWordLengthGrade = 100;
+    } else if (
+      this.state.averageWordLengthCount >= 4 &&
+      this.state.averageWordLengthCount <= 16
+    ) {
+      grades.averageWordLengthGrade = 75;
+    } else {
+      grades.averageWordLengthGrade = 50;
+    }
+
     console.log(grades);
   }
 
   calculateaAverageSentenceLength() {
     this.state.averageSentenceLength = Math.round(
-      this.state.essayWordCount / this.state.essaySentenceCount
+      this.state.essayWordCount / this.state.sentenceCount
     );
+    // console.log("this.state.essayWordCount: ", this.state.essayWordCount);
+    // console.log("this.state.essaySentenceCount: ", this.state.sentenceCount);
 
+    // console.log("average sentence length");
+    // console.log(this.state.averageSentenceLength);
     // console.log("this.state.essayWordCount: ", this.state.essayWordCount);
     // console.log(
     //   "this.state.essaySentenceCount: ",
