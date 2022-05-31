@@ -48,6 +48,7 @@ class HomeScreen extends Component {
       prepositionsCount: 0,
       referencesCount: 0,
       punctuationErrorCount: 0,
+      uniqueWordsPercentage: 0,
     };
   }
 
@@ -89,17 +90,19 @@ class HomeScreen extends Component {
     this.checkPunctuation();
     this.checkSpelling();
     this.countReferences();
-
     this.countPunctuationMistakes();
     this.calculateaAverageSentenceLength();
     this.percentageUniqueWords();
     this.checkUniqueWordsPercentage();
 
+    // Calculate the overall grade of the essay
+    this.calculateFinalGrade();
+
     // this.props.navigation.navigate("Feedback", {
     //   number: 2,
     // });
     const results = {
-      wordCount: this.state.essayWordCount,
+      essayWordCount: this.state.essayWordCount,
       sentenceCount: this.state.sentenceCount,
       paragraphsCount: this.state.paragraphsCount,
       prepositionsCount: this.state.prepositionsCount,
@@ -110,8 +113,9 @@ class HomeScreen extends Component {
       keyTermsPresent: this.state.keyTermsPresent,
       keyPhrasesPresent: this.state.keyPhrasesPresent,
       spellingMistakesCount: this.state.spellingMistakesCount,
-      essaySentenceCount: this.state.essaySentenceCount,
+      // essaySentenceCount: this.state.essaySentenceCount,
       punctuationErrorCount: this.state.punctuationErrorCount,
+      uniqueWordsPercentage: this.state.uniqueWordsPercentage,
     };
 
     // Check the punctuation
@@ -132,17 +136,131 @@ class HomeScreen extends Component {
     });
   }
 
+  // Function to calculate the final grade
+  calculateFinalGrade() {
+    // Set appropriate weights for each of the features, which can be changed later
+    let weights = {
+      essayWordCount: 0.12,
+      sentenceCount: 0.3,
+      paragraphsCount: 0.12,
+      prepositionCount: 0.4,
+      referencesCount: 0.1,
+      averageSentenceLength: 0.6,
+      averageWordLength: 0.4,
+      percentageUniqueWords: 0.4,
+      keyTermsPresent: 0.15,
+      keyPhrasesPresent: 0.15,
+      punctuationErrorCount: 0.15,
+    };
+
+    // Create a general set of variable that gives different rules for the essay depending on its length
+    let essayLengthRules = 0;
+
+    // Check which category the essay belongs to depending on its length
+    // if (this.state.maxNumberWords <= 1000 || this.state.minNumberWords >= 300) {
+    if (this.state.maxNumberWords <= 800) {
+      essayLengthRules = 500;
+      console.log("essayLengthRules: 500");
+    } else if (
+      this.state.maxNumberWords <= 1400 ||
+      (this.state.minNumberWords >= 800 && this.state.minNumberWords <= 1000)
+    ) {
+      essayLengthRules = 1000;
+      console.log("essayLengthRules: 1000");
+    } else if (
+      this.state.maxNumberWords > 1500 &&
+      this.state.maxNumberWords < 2000 &&
+      this.state.minNumberWords > 1000
+    ) {
+      essayLengthRules = 1500;
+      console.log("essayLengthRules: 1500");
+      // } else if (this.state.minNumberWords >= 1700) {
+    } else if (this.state.maxNumberWords > 2000) {
+      essayLengthRules = 2000;
+      console.log("essayLengthRules: 2000");
+    } else {
+      essayLengthRules = 500;
+    }
+
+    // Write differnet rules depending on how long the essay is
+    // 1 - Rules for essays of 500 words
+    let grades = {
+      essayWordCount: 0,
+    };
+
+    // --------------------
+    // CALCULATE THE GRADE FOR THE WORD COUNT
+    // -------------------
+    // console.log("word count: ", this.state.essayWordCount);
+    // console.log("min number words: ", this.state.minNumberWords);
+    // console.log("max number words: ", this.state.maxNumberWords);
+    // console.log(
+    //   "this.state.minNumberWord * 90/100: ",
+    //   (parseInt(this.state.minNumberWords) * 90) / 100
+    // );
+    // console.log(
+    //   "this.state.maxNumberWord * 110) / 100: ",
+    //   (this.state.maxNumberWords * 110) / 100
+    // );
+    // this.state.essayWordCount <= (this.state.maxNumberWord * 110) / 100;
+
+    if (this.state.essayWordCount <= this.state.maxNumberWords) {
+      console.log("max limit of words passed!");
+    }
+
+    // Calculate the grande for the essayWordCount feature
+    // Excelent - 100 points
+    // If the word count is in the range expected by the educator
+    if (
+      this.state.essayWordCount >= this.state.minNumberWords &&
+      this.state.essayWordCount <= this.state.maxNumberWords
+    ) {
+      grades.essayWordCount = 100;
+      console.log("word count : excenelent");
+    }
+    // Accomplishes - 75 points
+    // If the word count is in 10 % range of the expected word count
+    else if (
+      this.state.essayWordCount >= (this.state.minNumberWords * 90) / 100 &&
+      this.state.essayWordCount <= (this.state.maxNumberWords * 110) / 100
+    ) {
+      grades.essayWordCount = 75;
+      console.log("word count : accomplishes");
+    }
+
+    // Capable - 50 points
+    // If the word count is off by more than 10% and less than 35 percent
+    else if (
+      this.state.essayWordCount >= (this.state.minNumberWords * 70) / 100 &&
+      this.state.essayWordCount <= (this.state.maxNumberWords * 130) / 100
+    ) {
+      grades.essayWordCount = 50;
+      console.log("word count : capable");
+    }
+
+    // Beginned - 25 points
+    // If the word count is off by more than 35 percent
+    else if (
+      this.state.essayWordCount < (this.state.minNumberWords * 70) / 100 ||
+      this.state.essayWordCount > (this.state.maxNumberWords * 130) / 100
+    ) {
+      grades.essayWordCount = 25;
+      console.log("word count : beginner");
+    }
+    console.log(grades);
+  }
+
   calculateaAverageSentenceLength() {
     this.state.averageSentenceLength = Math.round(
       this.state.essayWordCount / this.state.essaySentenceCount
     );
 
-    console.log("this.state.essayWordCount: ", this.state.essayWordCount);
-    console.log(
-      "this.state.essaySentenceCount: ",
-      this.state.essaySentenceCount
-    );
-    console.log("sentence length: ", this.state.averageSentenceLength);
+    // console.log("this.state.essayWordCount: ", this.state.essayWordCount);
+    // console.log(
+    //   "this.state.essaySentenceCount: ",
+    //   this.state.essaySentenceCount
+    // );
+    // console.log("sentence length: ", this.state.averageSentenceLength);
   }
 
   countPunctuationMistakes() {
@@ -152,7 +270,7 @@ class HomeScreen extends Component {
     // Find all the instances where a potential punctuation mistake could occure
     let punctuationPotentialErrorsArray = essay.match(pattern);
 
-    console.log("Punctuatuion check", punctuationPotentialErrorsArray);
+    // console.log("Punctuatuion check", punctuationPotentialErrorsArray);
 
     // Array storing the punctuation allowed for sentence endings
     let correctPuntuationArray = [
@@ -200,7 +318,7 @@ class HomeScreen extends Component {
       });
     }
 
-    console.log("punctuation errors: ", this.state.punctuationErrorCount);
+    // console.log("punctuation errors: ", this.state.punctuationErrorCount);
   }
 
   countReferences() {
@@ -222,6 +340,8 @@ class HomeScreen extends Component {
 
   percentageUniqueWords() {
     let essay = this.state.essayText;
+    // Create an object to store all the words inside the essay and the amount of times they are present
+    let wordOccurancesCount = {};
     // Replace all the characters with an empty space before preceding to counting the total number of words
     essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
     // Remove multiple spaces with single space to lead to correct word count
@@ -231,7 +351,41 @@ class HomeScreen extends Component {
     // divide the essay into individual words
     essay = essay.split(" ");
 
-    // console.log("UNIQUE WORDS: ", essay);
+    // Sort the array of words
+    essay.sort();
+
+    for (let word of essay) {
+      // check if the word is already in accounted for, otherwise add it
+      if (wordOccurancesCount[word]) {
+        // Increase the number of times the word is present
+        wordOccurancesCount[word] += 1;
+      } else {
+        // If the word is not present, add it
+        wordOccurancesCount[word] = 1;
+      }
+    }
+
+    let uniqueWordsCount = 0;
+    // loop through the object and count how many unique words there are
+    for (let wordKey in wordOccurancesCount) {
+      // console.log(wordOccurancesCount[wordKey]);
+      // Count all the unique words
+      if (wordOccurancesCount[wordKey] == 1) {
+        uniqueWordsCount += 1;
+      }
+    }
+
+    // console.log("UNIQUE WORDS COUNT: ", uniqueWordsCount);
+
+    // Get the number of words in the essay, with each word adding 1 no matter how many times it appears
+    let wordOccurancesCountLength = Object.keys(wordOccurancesCount).length;
+    // calulate what percentage of all the words appear only once in the essay, representing the unique words
+    let percentageUniqueWords = Math.round(
+      (uniqueWordsCount / wordOccurancesCountLength) * 100
+    );
+
+    // Store the percentage of unique words inside the state
+    this.state.uniqueWordsPercentage = percentageUniqueWords;
   }
 
   checkPunctuation1() {
@@ -285,7 +439,7 @@ class HomeScreen extends Component {
     // store the words in an array
     let words = essay.split(" ");
     words.sort();
-    console.log(words);
+    // console.log(words);
   }
 
   // Count how often each word is present
@@ -334,15 +488,15 @@ class HomeScreen extends Component {
     });
 
     // Divide the sum of all length of each word by the total number of words
-    console.log(
-      "average length: ",
-      totalWordLength / this.state.essayWordCount
-    );
-    console.log(Math.round(totalWordLength / this.state.essayWordCount));
+    // console.log(
+    //   "average length: ",
+    //   totalWordLength / this.state.essayWordCount
+    // );
+    // console.log(Math.round(totalWordLength / this.state.essayWordCount));
     this.state.averageWordLengthCount = Math.round(
       totalWordLength / this.state.essayWordCount
     );
-    console.log(this.state.averageWordLengthCount);
+    // console.log(this.state.averageWordLengthCount);
   }
 
   countSentences() {
@@ -352,7 +506,7 @@ class HomeScreen extends Component {
 
     // console.log("Sentences: ", essay.match(/\w[.!?]\s*\$*/g));
     let sentences = essay.match(/\w[.!?]\s*\$*/g);
-    console.log(sentences);
+    // console.log(sentences);
     if (sentences != null) {
       this.state.sentenceCount = essay.match(/\w[.!?]\s*\$*/g).length;
     } else {
@@ -371,7 +525,7 @@ class HomeScreen extends Component {
     let errorCounter = 0;
     // Breack the essay into sentences and check that it starts with the capitalised word
     essay = essay.match(/[^.!?]+[.!?]/g);
-    console.log(essay);
+    // console.log(essay);
 
     // Check that the first occurance is a number OR " OR capitalised word
     let sentenceStartPattern = /^ *[A-Z1-9"\(]/g;
@@ -1111,7 +1265,7 @@ class HomeScreen extends Component {
                 ></TextInput>
               </View>
               <View>
-                <Text style={styles.label}>Min:</Text>
+                <Text style={styles.label}>Max:</Text>
                 <TextInput
                   style={styles.lecturerInput}
                   onChangeText={(maxNumberWords) =>
