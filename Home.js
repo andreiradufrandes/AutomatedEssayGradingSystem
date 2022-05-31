@@ -50,6 +50,7 @@ class HomeScreen extends Component {
       punctuationErrorCount: 0,
       uniqueWordsPercentage: 0,
       sentenceCount: 0,
+      overallGrade: 0,
     };
   }
 
@@ -114,9 +115,9 @@ class HomeScreen extends Component {
       keyTermsPresent: this.state.keyTermsPresent,
       keyPhrasesPresent: this.state.keyPhrasesPresent,
       spellingMistakesCount: this.state.spellingMistakesCount,
-      // essaySentenceCount: this.state.essaySentenceCount,
       punctuationErrorCount: this.state.punctuationErrorCount,
       uniqueWordsPercentage: this.state.uniqueWordsPercentage,
+      overallGrade: this.state.overallGrade,
     };
 
     // Check the punctuation
@@ -139,21 +140,6 @@ class HomeScreen extends Component {
 
   // Function to calculate the final grade
   calculateFinalGrade() {
-    // Set appropriate weights for each of the features, which can be changed later
-    let weights = {
-      essayWordCount: 0.12,
-      sentenceCount: 0.3,
-      paragraphsCount: 0.12,
-      prepositionCount: 0.4,
-      referencesCount: 0.1,
-      averageSentenceLength: 0.6,
-      averageWordLength: 0.4,
-      percentageUniqueWords: 0.4,
-      keyTermsPresent: 0.15,
-      keyPhrasesPresent: 0.15,
-      punctuationErrorCount: 0.15,
-    };
-
     // Create a general set of variable that gives different rules for the essay depending on its length
     let essayLengthRules = 0;
 
@@ -473,6 +459,37 @@ class HomeScreen extends Component {
       grades.averageWordLengthGrade = 50;
     }
 
+    // Set appropriate weights for each of the features, which can be changed later
+    let weights = {
+      essayWordCount: 0.12,
+      sentenceCount: 0.03,
+      paragraphsCount: 0.12,
+      prepositionCount: 0.04,
+      referencesCount: 0.1,
+      averageSentenceLength: 0.06,
+      averageWordLength: 0.04,
+      percentageUniqueWords: 0.04,
+      keyTermsPresent: 0.17,
+      keyPhrasesPresent: 0.17,
+      punctuationErrorCount: 0.15,
+    };
+
+    // Calculate the overall grade using the apropriate weights for each feature
+    let grade =
+      grades.essayWordCount * weights.essayWordCount +
+      grades.keyTermsGrade * weights.keyTermsPresent +
+      grades.keyPhrasesGrade * weights.keyPhrasesPresent +
+      grades.punctuationGrade * weights.punctuationErrorCount +
+      grades.referencesGrades * weights.referencesCount +
+      grades.paragraphsGrade * weights.paragraphsCount +
+      grades.percentageUniqueWordsGrade * weights.percentageUniqueWords +
+      grades.prepositionGrade * weights.prepositionCount +
+      grades.sentenceCountGrade * weights.sentenceCount +
+      grades.averageSentenceLengthGrade * weights.averageSentenceLength +
+      grades.averageWordLengthGrade * weights.averageWordLength;
+    console.log("GRADE: ", grade);
+
+    this.state.overallGrade = (grade / 10).toFixed(1);
     console.log(grades);
   }
 

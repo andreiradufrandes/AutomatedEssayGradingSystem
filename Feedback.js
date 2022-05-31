@@ -36,7 +36,7 @@ class FeedbackScreen extends Component {
           <View style={styles.gradeRow}>
             <Text style={styles.gradeLabel}>GRADE: </Text>
             <Text style={styles.gradeLabel}></Text>
-            <Text style={styles.grade}>5.6/10</Text>
+            <Text style={styles.grade}> {this.state.overallGrade}/10</Text>
           </View>
           {/* <View style={styles.row}>
             <Text style={styles.subtitle}>OVERVIEW OF THE ESSAY</Text>
@@ -49,7 +49,7 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableHeaderText}>FEATURE</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text style={styles.tableHeaderText}>ERROR COUNT</Text>
+                <Text style={styles.tableHeaderText}>FEATURE NUMBERS</Text>
               </View>
             </View>
             {/* Table row */}
@@ -58,7 +58,9 @@ class FeedbackScreen extends Component {
                 <Text style={styles.tableCellText}>WORD COUNT</Text>
               </View>
               <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>{this.state.wordCount}</Text>
+                <Text style={styles.tableCellText}>
+                  {this.state.essayWordCount}
+                </Text>
               </View>
             </View>
             {/* Table row */}
