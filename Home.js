@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import React, { Component } from "react";
