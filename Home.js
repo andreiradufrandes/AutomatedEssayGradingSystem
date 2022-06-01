@@ -47,55 +47,48 @@ class HomeScreen extends Component {
     };
   }
 
-  // main function
+  // main function calling all the necesarry functions for extracting the features
   processText() {
-    // console.log("Essay:\n", this.state.essayText);
-    let essayExample =
-      "In this essay we will  discuss the... Notion that virtue is knowledge. We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
-    // Store the essay from the state inside a variable
-    // const essay = this.state.essayText; // replace
-
-    const essay = essayExample; // change
-
-    // Count the number of words for the whole essay
+    // Count the total number of words
     this.countWords();
 
     // calculate the average word length
     this.averageWordLength();
 
-    // Count the number of sentences for the whole essay
+    // Count the total number of sentences
     this.countSentences();
-
-    // Calculate the average number of words per sentence
-    // Save the data inside the state to be used during the check
 
     // Check how many of the lecture's parameters are present inside the essay
     this.checkForLecturersParameters();
 
-    // Count the number of paragraphs inside the essay
+    // Count the number of paragraphs
     this.countParagraphs();
 
-    // Check if the of words inside the essay is in the range speciied by the lecturer
-    // this.checkWordsRange();
-    // Count the number of prepositions present in the essay
+    // Count the number of prepositions
     this.countPrepositions();
-    // Check how frequently each word appear in the essay
-    this.checkWordFrequency();
-    this.checkSpelling();
-    this.checkPunctuation();
-    this.checkSpelling();
+
+    // Callculate the word frequency
+    // ----------
+    //  DELETE I THINK
+    // --------
+    // this.checkWordFrequency(); // TODO
+
+    // Count the number of references
     this.countReferences();
+
+    // Count the number of punctuation errors
     this.countPunctuationMistakes();
+
+    // Calculate the average sentece length
     this.calculateaAverageSentenceLength();
+
+    // Calculate the percentage of unique words
     this.percentageUniqueWords();
-    this.checkUniqueWordsPercentage();
 
     // Calculate the overall grade of the essay
     this.calculateFinalGrade();
 
-    // this.props.navigation.navigate("Feedback", {
-    //   number: 2,
-    // });
+    // Store the data about all the features extracted to be send to the feedback page
     const results = {
       essayWordCount: this.state.essayWordCount,
       sentenceCount: this.state.sentenceCount,
@@ -104,28 +97,14 @@ class HomeScreen extends Component {
       referencesCount: this.state.referencesCount,
       averageSentenceLength: this.state.averageSentenceLength,
       averageWordLengthCount: this.state.averageWordLengthCount,
-      percentageUniqueWords: this.state.percentageUniqueWords,
       keyTermsPresent: this.state.keyTermsPresent,
       keyPhrasesPresent: this.state.keyPhrasesPresent,
-      spellingMistakesCount: this.state.spellingMistakesCount,
       punctuationErrorCount: this.state.punctuationErrorCount,
       uniqueWordsPercentage: this.state.uniqueWordsPercentage,
       overallGrade: this.state.overallGrade,
     };
 
-    // Check the punctuation
-    // this.checkPunctuation1();
-
-    // var dictionary = new Typo("en_EN", false, false, {
-    //   dictionaryPath: "typo/dictionaries",
-    // });
-
-    // var is_spelled_correctly = dictionary.check("mispelled");
-
-    // console.log(is_spelled_correctly);
-    // -> ['blahblahblah', 'olololo']
-
-    // Send the object cntaining the essay features to the results page
+    // Direct the user to the feedback page
     this.props.navigation.navigate("Feedback", {
       results: results,
     });
@@ -486,23 +465,15 @@ class HomeScreen extends Component {
     console.log(grades);
   }
 
+  // Calculate the average sentence length
   calculateaAverageSentenceLength() {
+    // Divide the number of words in the essay by the number of sentnces in order to get the average sentence length
     this.state.averageSentenceLength = Math.round(
       this.state.essayWordCount / this.state.sentenceCount
     );
-    // console.log("this.state.essayWordCount: ", this.state.essayWordCount);
-    // console.log("this.state.essaySentenceCount: ", this.state.sentenceCount);
-
-    // console.log("average sentence length");
-    // console.log(this.state.averageSentenceLength);
-    // console.log("this.state.essayWordCount: ", this.state.essayWordCount);
-    // console.log(
-    //   "this.state.essaySentenceCount: ",
-    //   this.state.essaySentenceCount
-    // );
-    // console.log("sentence length: ", this.state.averageSentenceLength);
   }
 
+  // Count the punctuation mistakes
   countPunctuationMistakes() {
     let essay = this.state.essayText;
     // define a pattern that looks for any potential punctuation mistakes
@@ -510,9 +481,7 @@ class HomeScreen extends Component {
     // Find all the instances where a potential punctuation mistake could occure
     let punctuationPotentialErrorsArray = essay.match(pattern);
 
-    // console.log("Punctuatuion check", punctuationPotentialErrorsArray);
-
-    // Array storing the punctuation allowed for sentence endings
+    // Store all the correct punctuation a sentence could end with
     let correctPuntuationArray = [
       "?!",
       "...",
@@ -548,29 +517,28 @@ class HomeScreen extends Component {
       '..."',
     ];
 
-    // Check whether the sentence endings are correct or not
+    // Check whether the sentence endings are correct or not by checking the punctuation insie the sentences against the allowed punctuation array elements
     if (punctuationPotentialErrorsArray != null) {
       punctuationPotentialErrorsArray.forEach((element) => {
         if (!correctPuntuationArray.includes(element)) {
-          console.log("error: ", element);
+          // If a punctuation mistake is found, reflect that in the state
           this.state.punctuationErrorCount += 1;
         }
       });
     }
-
-    // console.log("punctuation errors: ", this.state.punctuationErrorCount);
   }
 
+  // Count the number of references
   countReferences() {
     let essay = this.state.essayText;
 
     // Create a pattern for detecting all the inline references
     let pattern = new RegExp(/\(\D+\d{4}\)/g);
 
-    // Find all the instances of the pattern in the text
+    // Find all the inside the essay
     let citations = essay.match(pattern);
 
-    // store the number of citations in an array
+    // If citations are found, count them and relect thsis inside the state
     if (citations == null) {
       this.state.referencesCount = 0;
     } else {
@@ -578,6 +546,7 @@ class HomeScreen extends Component {
     }
   }
 
+  // Calculate the percenta of unique words
   percentageUniqueWords() {
     let essay = this.state.essayText;
     // Create an object to store all the words inside the essay and the amount of times they are present
@@ -588,12 +557,13 @@ class HomeScreen extends Component {
     essay = essay.replace(/[ ]{2,}/g, " ");
     // turn all the words to lowercase to ease the search
     essay = essay.toLowerCase();
-    // divide the essay into individual words
+    // split the essay into individual words
     essay = essay.split(" ");
 
-    // Sort the array of words
+    // Sort the array to esay the search
     essay.sort();
 
+    // Loop through the array of words and count how many times each of them appears in the essay
     for (let word of essay) {
       // check if the word is already in accounted for, otherwise add it
       if (wordOccurancesCount[word]) {
@@ -608,20 +578,15 @@ class HomeScreen extends Component {
     let uniqueWordsCount = 0;
     // loop through the object and count how many unique words there are
     for (let wordKey in wordOccurancesCount) {
-      // console.log(wordOccurancesCount[wordKey]);
       // Count all the unique words
       if (wordOccurancesCount[wordKey] == 1) {
         uniqueWordsCount += 1;
       }
     }
 
-    // console.log("UNIQUE WORDS COUNT: ", uniqueWordsCount);
-
-    // Get the number of words in the essay, with each word adding 1 no matter how many times it appears
+    // Count the number of words, words that appear multiple times only being counted once
     let wordOccurancesCountLength = Object.keys(wordOccurancesCount).length;
-    console.log("wordOccurancesCountLength: ", wordOccurancesCountLength);
-    console.log("uniqueWordsCount: ", uniqueWordsCount);
-    // calulate what percentage of all the words appear only once in the essay, representing the unique words
+    // Calculate what percentage of the words are unique (appear only once in the essay)
     let percentageUniqueWords = Math.round(
       (uniqueWordsCount / wordOccurancesCountLength) * 100
     );
@@ -630,35 +595,7 @@ class HomeScreen extends Component {
     this.state.uniqueWordsPercentage = percentageUniqueWords;
   }
 
-  checkPunctuation1() {
-    let essay = this.state.essayText;
-
-    // Break the essay in sentences to be checked for correct punctuation
-    let essaySentences = essay.match(/[^\.!\?]+[\.!\?]+/g);
-    //
-    console.log("CHECK PUNCTUATION: ", essaySentences);
-
-    // Create an array that contains the valid punctuation for a sentence
-    let validPunctuation = [".", "...", "?", "?!", "!"];
-
-    // for each of the sentences, check if the punctuation at the end is correct
-  }
-
-  // Not working
-  checkSpelling() {
-    // const fs = require("fs");
-    // fs.readFile("file.txt", "utf-8", (err, data) => {
-    //   // Check if there is an error
-    //   if (err) {
-    //     console.error(err);
-    //     return null;
-    //   }
-    //   // Log the file contents
-    //   console.log("DATA ", data);
-    // });
-  }
-
-  // Counts the words only NOT symbols
+  // Count the total number of words inside the essay
   countWords() {
     let essay = this.state.essayText;
     // Replace all the characters with an empty space before preceding to counting the total number of words
@@ -666,50 +603,8 @@ class HomeScreen extends Component {
     // Remove multiple spaces with single space to lead to correct word count
     essay = essay.replace(/[ ]{2,}/g, " ");
 
-    // Count the number of words
+    // Store the number of words inside the state
     this.state.essayWordCount = essay.split(" ").length;
-    // console.log("WORD!!: ", essay.split(" "));
-  }
-
-  checkUniqueWordsPercentage() {
-    let essay = this.state.essayText;
-    // Replace all the characters with an empty space before preceding to counting the total number of words
-    essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
-    // Remove multiple spaces with single space to lead to correct word count
-    essay = essay.replace(/[ ]{2,}/g, " ");
-
-    // store the words in an array
-    let words = essay.split(" ");
-    words.sort();
-    // console.log(words);
-  }
-
-  // Count how often each word is present
-  checkWordFrequency() {
-    let essay = this.state.essayText;
-    essay =
-      "In this essay we will  discuss the... Notion that virtue is knowledge. We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
-    // Replace all the characters with an empty space before preceding to counting the total number of words
-    essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
-    // Remove multiple spaces with single space to lead to correct word count
-    essay = essay.replace(/[ ]{2,}/g, " ");
-    // Count the number of words
-    essay = essay.split(" ");
-
-    let wordFrequencyCounter = {};
-
-    // Loop through all the word in the essay, and keep count of how many times they appear
-    essay.forEach((word) => {
-      // If the word is not present, add it to the dictionary
-      if (!wordFrequencyCounter[word]) {
-        wordFrequencyCounter[word] = 1;
-      } else {
-        // If the word is already present in the dictionary, increase its count number
-        wordFrequencyCounter[word] += 1;
-      }
-    });
-
-    // console.group(wordFrequencyCounter);
   }
 
   // Check the average length of the words
@@ -720,7 +615,7 @@ class HomeScreen extends Component {
     essay = essay.replace(/[^a-zA-Z0-9 ]/g, "");
     // Remove multiple spaces with single space to lead to correct word count
     essay = essay.replace(/[ ]{2,}/g, " ");
-    // store all the words inside an array to be able to count the word length after
+    // store all the words inside an array to be able to calculate the total number
     essay = essay.split(" ");
 
     let totalWordLength = 0;
@@ -729,18 +624,13 @@ class HomeScreen extends Component {
       totalWordLength += word.length;
     });
 
-    // Divide the sum of all length of each word by the total number of words
-    // console.log(
-    //   "average length: ",
-    //   totalWordLength / this.state.essayWordCount
-    // );
-    // console.log(Math.round(totalWordLength / this.state.essayWordCount));
+    // Calculate the average word  lentgh by dividing the number of characters by the number of words
     this.state.averageWordLengthCount = Math.round(
       totalWordLength / this.state.essayWordCount
     );
-    // console.log(this.state.averageWordLengthCount);
   }
 
+  // Count the number of sentnces
   countSentences() {
     // Check the words followed by . or ! or ?, and followed by a whitespace, which signify then end on a sentence
     let essay = this.state.essayText;
@@ -754,31 +644,6 @@ class HomeScreen extends Component {
     } else {
       this.state.sentenceCount = 0;
     }
-  }
-
-  checkPunctuation() {
-    let essay = this.state.essayText;
-    // Check the words followed by . or ! or ?, and followed by a whitespace, which signify then end on a sentence
-
-    // essay =
-    // "In this essay we will  discuss the...otion that virtue is knowledge. (We will do this by following Plato's own route into the discussion - a refutation of Meno's misconception of knowledge. \"The argument Plato provides to this end gives us crucial contextual information and allows us to see how Plato derives his doctrine that virtue is knowledge. (altought)We will look at the terms Plato uses to define virtuous and non-virtuous actions and analyse the connotations these held for him. I will then provide an exposition of the traditional formulation of the platonic 'moral paradox' before arguing that this paradox only exists if one misinterprets Plato's own text. 1. Desire for the good Plato's Meno focuses on the issue of virtue - its nature and its properties. During the dialogue several definitions of virtue are discussed. However, the definition that seems to be settled upon entails the doctrine that virtue is knowledge. This definition is proposed as a response to Meno's suggestion that virtue is a term encompassing two elements: firstly that virtue is the desire for good things and secondly that it is the ability to obtain good things. By way of answer, Socrates suggests that, in fact, everyone desires the good. As virtue is not present in all men, virtue cannot be the desire for good things. Socrates' argument for it.";
-    // console.log(essay.match(/[^.!?]+[.!?]/g));
-
-    let errorCounter = 0;
-    // Breack the essay into sentences and check that it starts with the capitalised word
-    essay = essay.match(/[^.!?]+[.!?]/g);
-    // console.log(essay);
-
-    // Check that the first occurance is a number OR " OR capitalised word
-    let sentenceStartPattern = /^ *[A-Z1-9"\(]/g;
-
-    // Check if all the sentences start with a capitalised letter or a number or a symbol found at the beginning of the sentence
-    essay.forEach((sentence) => {
-      if (!sentence.match(sentenceStartPattern)) {
-        // console.log("Error, sentence written incorscely:  ", sentence);
-        errorCounter += 1;
-      }
-    });
   }
 
   checkForLecturersParameters() {

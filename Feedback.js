@@ -141,7 +141,7 @@ class FeedbackScreen extends Component {
               </View>
               <View style={styles.tableCell}>
                 <Text style={styles.tableCellText}>
-                  {this.state.uniqueWordsPercentage}
+                  {this.state.uniqueWordsPercentage} %
                 </Text>
               </View>
             </View>
