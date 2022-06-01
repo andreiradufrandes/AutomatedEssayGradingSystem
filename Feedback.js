@@ -169,16 +169,7 @@ class FeedbackScreen extends Component {
               </View>
             </View>
             {/* Table row */}
-            <View style={styles.tableRow}>
-              <View style={styles.tableCellLabel}>
-                <Text style={styles.tableCellText}>SPELLING ERRORS COUNT</Text>
-              </View>
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>
-                  {this.state.spellingMistakesCount}
-                </Text>
-              </View>
-            </View>
+
             <View style={styles.tableRow}>
               <View style={styles.tableCellLabel}>
                 <Text style={styles.tableCellText}>

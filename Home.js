@@ -7,20 +7,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { Component } from "react";
-// import { readFile } from "fs";
-// import { readDictionaryAsync } from "spell-checker-js";
-
-// Set isLoading to true later
-
-// Todo
-// 1. Reset parameters at every turn
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       essayText: "",
-      isLoading: false, // set to true later
+      isLoading: false,
       essayWordCount: "",
       essaySentenceCount: "",
       averageSentenceLength: "",
@@ -626,6 +619,8 @@ class HomeScreen extends Component {
 
     // Get the number of words in the essay, with each word adding 1 no matter how many times it appears
     let wordOccurancesCountLength = Object.keys(wordOccurancesCount).length;
+    console.log("wordOccurancesCountLength: ", wordOccurancesCountLength);
+    console.log("uniqueWordsCount: ", uniqueWordsCount);
     // calulate what percentage of all the words appear only once in the essay, representing the unique words
     let percentageUniqueWords = Math.round(
       (uniqueWordsCount / wordOccurancesCountLength) * 100
