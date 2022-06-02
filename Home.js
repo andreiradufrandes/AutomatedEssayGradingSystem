@@ -4,6 +4,10 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Modal,
+  Alert,
+  Pressable,
+  Button,
 } from "react-native";
 import React, { Component } from "react";
 
@@ -41,11 +45,30 @@ class HomeScreen extends Component {
       uniqueWordsPercentage: 0,
       sentenceCount: 0,
       overallGrade: 0,
+      // Alert box flag
+      errorMessage: "Something went wrong",
+      modalVisible: false,
     };
   }
 
+  // Add a toggle function to set the visibility for the user alerts
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  };
   // main function calling all the necesarry functions for extracting the features
   processText() {
+    // check if the essay, minimum and maximum word range inputs have been added
+    if (
+      this.state.essayText.trim() == "" ||
+      isNaN(this.state.minNumberWords) ||
+      isNaN(this.state.maxNumberWords) ||
+      this.state.minNumberWords.trim() == "" ||
+      this.state.maxNumberWords.trim() == ""
+    ) {
+      this.setModalVisible(!modalVisible);
+      return null;
+    }
+
     // Count the total number of words
     this.countWords();
 
@@ -1057,8 +1080,29 @@ class HomeScreen extends Component {
 
   // Render the user inteface with the necessary elements
   render() {
+    const { modalVisible } = this.state.modalVisible;
     return (
       <View style={styles.body}>
+        {/* modal alert */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            this.setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <Text>{this.state.errorMessage} </Text>
+              <Button onPress={() => this.setModalVisible(!modalVisible)}>
+                <Text>{"OK"}</Text>
+              </Button>
+            </View>
+          </View>
+          {/* </View> */}
+        </Modal>
+
         <Text style={styles.title}>AUTOMATED ESSAY MARKING SYSTEM</Text>
         <View style={styles.container}>
           <View style={styles.row}>
@@ -1071,6 +1115,7 @@ class HomeScreen extends Component {
               multiline={true}
               onChangeText={(essayText) => this.setState({ essayText })}
               value={this.state.essayText}
+              maxLength={10000}
             />
           </View>
 
@@ -1344,5 +1389,61 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 2,
     color: "#444444",
+  },
+
+  // Modal alert box settings
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    margintop: "10",
+  },
+  modalView: {
+    margin: "20",
+    backgroundColor: "white",
+    padding: "40",
+    alignItems: "center",
+    border: "2",
   },
 });
