@@ -5,8 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
-  Alert,
-  Pressable,
   Button,
 } from "react-native";
 import React, { Component } from "react";
@@ -46,7 +44,7 @@ class HomeScreen extends Component {
       sentenceCount: 0,
       overallGrade: 0,
       // Alert box flag
-      errorMessage: "Something went wrong",
+      errorMessage: "",
       modalVisible: false,
     };
   }
@@ -55,17 +53,26 @@ class HomeScreen extends Component {
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
   };
-  // main function calling all the necesarry functions for extracting the features
+
+  // main function calling all the neccessary functions for extracting the features from the essay
   processText() {
-    // check if the essay, minimum and maximum word range inputs have been added
+    // Check if the user has added the essay or not
+    if (this.state.essayText.trim() == "") {
+      this.state.errorMessage = "Add the essay before submitting. Try again!";
+      this.setModalVisible(true);
+      return null;
+    }
+
+    // check if the essay, minimum and maximum word range inputs have been added and inform the user if their input is wrong
     if (
-      this.state.essayText.trim() == "" ||
       isNaN(this.state.minNumberWords) ||
       isNaN(this.state.maxNumberWords) ||
       this.state.minNumberWords.trim() == "" ||
-      this.state.maxNumberWords.trim() == ""
+      this.state.maxNumberWords.trim() == "" ||
+      this.state.minNumberWords >= this.state.maxNumberWords
     ) {
-      this.setModalVisible(!modalVisible);
+      this.state.errorMessage = "Expected word count input invalid. Try again!";
+      this.setModalVisible(true);
       return null;
     }
 
@@ -1080,28 +1087,36 @@ class HomeScreen extends Component {
 
   // Render the user inteface with the necessary elements
   render() {
-    const { modalVisible } = this.state.modalVisible;
+    // const { modalVisible } = this.state.modalVisible;
+    const { modalVisible } = this.state;
+
     return (
       <View style={styles.body}>
         {/* modal alert */}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            this.setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalView}>
-              <Text>{this.state.errorMessage} </Text>
-              <Button onPress={() => this.setModalVisible(!modalVisible)}>
-                <Text>{"OK"}</Text>
-              </Button>
+        {this.state.modalVisible ? (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              this.setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>{this.state.errorMessage} </Text>
+                <Button
+                  title={"OK"}
+                  onPress={() => this.setModalVisible(!modalVisible)}
+                />
+
+                {/* <> */}
+                {/* </Button> */}
+              </View>
             </View>
-          </View>
-          {/* </View> */}
-        </Modal>
+            {/* </View> */}
+          </Modal>
+        ) : null}
 
         <Text style={styles.title}>AUTOMATED ESSAY MARKING SYSTEM</Text>
         <View style={styles.container}>
@@ -1391,7 +1406,6 @@ const styles = StyleSheet.create({
     color: "#444444",
   },
 
-  // Modal alert box settings
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -1430,8 +1444,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 15,
+    padding: 15,
     textAlign: "center",
+    backgroundColor: "white",
+    marginBottom: 10,
+    fontSize: 18,
   },
   modalContainer: {
     flex: 1,
@@ -1441,8 +1458,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: "20",
-    backgroundColor: "white",
-    padding: "40",
     alignItems: "center",
     border: "2",
   },
